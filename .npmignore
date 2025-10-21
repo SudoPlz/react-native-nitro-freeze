@@ -1,0 +1,33 @@
+# Example app
+example/
+
+# Tests
+__tests__/
+__mocks__/
+__fixtures__/
+
+# Source maps
+*.map
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+.circleci/
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+*.tgz
+
+# Dev files
+.eslintrc.js
+.prettierrc.js
+tsconfig.json
+tsconfig.build.json
+

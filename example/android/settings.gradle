@@ -1,0 +1,11 @@
+rootProject.name = 'NitroFreezeExample'
+
+apply from: file("../node_modules/@react-native/gradle-plugin/settings.gradle")
+
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
+
+// Include the library project
+include ':react-native-nitro-freeze'
+project(':react-native-nitro-freeze').projectDir = new File(rootProject.projectDir, '../../android')
+

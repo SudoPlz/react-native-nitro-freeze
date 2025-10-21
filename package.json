@@ -1,0 +1,80 @@
+{
+  "name": "react-native-nitro-freeze",
+  "version": "1.0.0",
+  "description": "A React Native library that replicates react-freeze without Suspense, Fabric-safe and NitroModule-powered",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
+  "files": [
+    "src",
+    "lib",
+    "android",
+    "ios",
+    "cpp",
+    "react-native-nitro-freeze.podspec",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "scripts": {
+    "typescript": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepare": "bob build",
+    "example": "yarn --cwd example"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "freeze",
+    "performance",
+    "nitro",
+    "fabric"
+  ],
+  "repository": "https://github.com/yourusername/react-native-nitro-freeze",
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yourusername/react-native-nitro-freeze/issues"
+  },
+  "homepage": "https://github.com/yourusername/react-native-nitro-freeze#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@react-native/eslint-config": "^0.78.0",
+    "@types/react": "^19.0.0",
+    "@types/react-native": "^0.78.0",
+    "eslint": "^8.57.0",
+    "react": "^19.0.0",
+    "react-native": "^0.78.0",
+    "react-native-builder-bob": "^0.30.0",
+    "typescript": "^5.6.0"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0",
+    "react-native": ">=0.78.0"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "codegenConfig": {
+    "name": "RNNitroFreezeSpec",
+    "type": "modules",
+    "jsSrcsDir": "src/native"
+  }
+}
+

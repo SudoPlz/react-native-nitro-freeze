@@ -1,0 +1,35 @@
+{
+  "name": "react-native-nitro-freeze-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "lint": "eslint .",
+    "typescript": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-native": "^0.78.0",
+    "react-native-gesture-handler": "^2.21.0",
+    "react-native-reanimated": "^3.17.0",
+    "react-native-nitro-freeze": "file:.."
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.0",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/runtime": "^7.25.0",
+    "@react-native/babel-preset": "^0.78.0",
+    "@react-native/eslint-config": "^0.78.0",
+    "@react-native/metro-config": "^0.78.0",
+    "@react-native/typescript-config": "^0.78.0",
+    "@types/react": "^19.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+

@@ -1,0 +1,54 @@
+# OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build output
+lib/
+dist/
+*.tgz
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+.env
+.envrc
+
+# not essential for library
+IMPLEMENTATION_SUMMARY.md
+PROJECT_COMPLETE.md
+EXAMPLE_COMPLETE.md
+QUICKSTART.md
+*Prompt*.txt
