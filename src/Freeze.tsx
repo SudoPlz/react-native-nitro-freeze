@@ -1,114 +1,136 @@
-import React, { memo, useMemo, useContext, useRef, useEffect } from 'react';
-import { View, StyleSheet, ViewProps } from 'react-native';
+import React, { useContext, useMemo, Component } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { FreezeContext } from './context';
-import { setViewFrozen } from './native';
 
 export interface FreezeProps {
-  /**
-   * When true, the children are "frozen" - they won't re-render,
-   * effects won't run, and events are disabled.
-   */
   freeze: boolean;
-  /**
-   * The content to freeze/unfreeze
-   */
   children: React.ReactNode;
-  /**
-   * Optional key for React reconciliation
-   */
-  key?: string | number;
+  hideContent?: boolean;
 }
 
 /**
- * Freeze component - prevents re-renders and updates when freeze={true}
- * 
- * This is a drop-in replacement for react-freeze that works without Suspense.
- * It uses React.memo with a custom comparator to prevent updates when frozen,
- * and propagates frozen state via context to enable proper nesting behavior.
- * 
- * Nesting behavior:
- * - If a parent Freeze has freeze={true}, all descendant Freeze components are frozen
- * - If a child Freeze has freeze={true} but parent is unfrozen, only that subtree is frozen
- * - This allows fine-grained control over what parts of the tree are frozen
- * 
- * @example
- * ```tsx
- * <Freeze freeze={isInactive}>
- *   <ExpensiveComponent />
- * </Freeze>
- * ```
+ * FreezeGuard - Class component that registers/unregisters frozen fiber with FiberRoot
+ * This allows the React Native patch to block state updates for frozen subtrees
  */
-const FreezeInner: React.FC<FreezeProps> = ({ freeze, children }) => {
-  const parentContext = useContext(FreezeContext);
-  const viewRef = useRef<View>(null);
+class FreezeGuard extends Component<{ frozen: boolean; children: React.ReactNode }> {
+  componentDidMount() {
+    if (this.props.frozen) {
+      this.registerWithFiberRoot();
+    }
+  }
   
-  // If any ancestor is frozen, this subtree must be frozen too
-  // This ensures proper nesting: parent freeze propagates down
+  componentWillUnmount() {
+    this.unregisterFromFiberRoot();
+  }
+  
+  componentDidUpdate(prevProps: { frozen: boolean }) {
+    if (this.props.frozen !== prevProps.frozen) {
+      if (this.props.frozen) {
+        this.registerWithFiberRoot();
+      } else {
+        this.unregisterFromFiberRoot();
+      }
+    }
+  }
+  
+  render() {
+    // Register during render for immediate effect
+    if (this.props.frozen) {
+      this.registerWithFiberRoot();
+    }
+    
+    return <>{this.props.children}</>;
+  }
+  
+  private registerWithFiberRoot() {
+    try {
+      const fiber = (this as any)._reactInternals;
+      if (!fiber) return;
+      
+      // Traverse up to find the FiberRoot
+      let node = fiber;
+      while (node.return) {
+        node = node.return;
+      }
+      
+      const fiberRoot = node.stateNode;
+      if (fiberRoot) {
+        // Register this fiber as frozen
+        // The React Native patch checks these properties to block state updates
+        (fiberRoot as any).__frozenFiber = fiber;
+        (fiberRoot as any).__isFrozen = () => this.props.frozen;
+      }
+    } catch (e) {
+      if (__DEV__) {
+        console.error('[Freeze] Error registering frozen fiber:', e);
+      }
+    }
+  }
+  
+  private unregisterFromFiberRoot() {
+    try {
+      const fiber = (this as any)._reactInternals;
+      if (!fiber) return;
+      
+      let node = fiber;
+      while (node.return) {
+        node = node.return;
+      }
+      
+      const fiberRoot = node.stateNode;
+      if (fiberRoot) {
+        delete (fiberRoot as any).__frozenFiber;
+        delete (fiberRoot as any).__isFrozen;
+      }
+    } catch (e) {
+      if (__DEV__) {
+        console.error('[Freeze] Error unregistering frozen fiber:', e);
+      }
+    }
+  }
+}
+
+/**
+ * Freeze component - Prevents re-renders and state updates for frozen subtrees
+ * 
+ * Requires a patched React Native renderer that blocks setState/useReducer
+ * for components within a frozen subtree.
+ * 
+ * @param freeze - Whether to freeze the component tree
+ * @param children - The component tree to freeze
+ * @param hideContent - Whether to hide content when frozen (default: false)
+ */
+export function Freeze({ freeze, children, hideContent = false }: FreezeProps) {
+  const parentContext = useContext(FreezeContext);
+  
+  // Inherit frozen state from parent
   const effectiveFreeze = parentContext.isFrozen || freeze;
   
-  // Create context value for descendants
   const contextValue = useMemo(
     () => ({ isFrozen: effectiveFreeze }),
     [effectiveFreeze]
   );
 
-  // Apply native freeze optimizations when freeze state changes
-  useEffect(() => {
-    if (viewRef.current) {
-      setViewFrozen(viewRef.current, effectiveFreeze);
-    }
-  }, [effectiveFreeze]);
-
-  // When frozen, hide the view and disable interactions
-  // Don't unmount - just make it invisible and non-interactive
-  const containerStyle = effectiveFreeze
+  const containerStyle = effectiveFreeze && hideContent
     ? styles.frozen
     : undefined;
 
   return (
     <FreezeContext.Provider value={contextValue}>
-      <View ref={viewRef} style={containerStyle} pointerEvents={effectiveFreeze ? 'none' : 'auto'}>
-        {children}
+      <View 
+        style={containerStyle} 
+        pointerEvents={effectiveFreeze ? 'none' : 'auto'}
+      >
+        <FreezeGuard frozen={effectiveFreeze}>
+          {children}
+        </FreezeGuard>
       </View>
     </FreezeContext.Provider>
   );
-};
-
-/**
- * Custom comparison function for React.memo
- * 
- * This is the key to preventing re-renders:
- * - If both prev and next are frozen, always return true (no update needed)
- * - Otherwise, only update if freeze state changed
- * 
- * This means when freeze={true}, the component becomes "locked" and won't
- * process any prop changes until freeze becomes false again.
- */
-const areEqual = (prev: FreezeProps, next: FreezeProps): boolean => {
-  // Both frozen? Skip update entirely - this is the freeze optimization
-  if (prev.freeze && next.freeze) {
-    return true;
-  }
-  
-  // Freeze state changed? Must update
-  if (prev.freeze !== next.freeze) {
-    return false;
-  }
-  
-  // Both unfrozen - allow normal React reconciliation
-  // (children are compared by reference)
-  return prev.children === next.children;
-};
-
-/**
- * Export the memoized Freeze component
- * This is the main public API, matching react-freeze's interface
- */
-export const Freeze = memo(FreezeInner, areEqual);
+}
 
 const styles = StyleSheet.create({
   frozen: {
     opacity: 0,
   },
 });
-

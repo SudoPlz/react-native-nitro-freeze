@@ -1,6 +1,6 @@
-# React Native Nitro Freeze - Example App
+# React Zombie Freeze - Example App
 
-This example app demonstrates all the features of `react-native-nitro-freeze`.
+This example app demonstrates all the features of `react-zombie-freeze`.
 
 ## Features Demonstrated
 
@@ -35,7 +35,7 @@ cd ios && pod install && cd ..
 yarn ios
 ```
 
-Or open `ios/NitroFreezeExample.xcworkspace` in Xcode and run from there.
+Or open `ios/ZombieFreezeExample.xcworkspace` in Xcode and run from there.
 
 ### Run on Android
 
@@ -146,17 +146,20 @@ console.log('Child render:', metrics.childRenderCount);
 console.log('Freeze effective:', metrics.freeze);
 ```
 
-### Check Native Module
+### Check Freeze State
 
-Add this to see if native module is loaded:
+Add this to see if component is frozen:
 
 ```tsx
-import { isNativeModuleAvailable } from 'react-native-nitro-freeze';
+import { useIsFrozen } from 'react-zombie-freeze';
 
-console.log('Native module available:', isNativeModuleAvailable());
+function MyComponent() {
+  const isFrozen = useIsFrozen();
+  console.log('Component frozen:', isFrozen);
+  
+  return <Text>Frozen: {isFrozen ? 'Yes' : 'No'}</Text>;
+}
 ```
-
-If `false`, you're in JS-only mode (still works, just without native optimizations).
 
 ## Customization
 
@@ -171,8 +174,8 @@ Then measure performance impact using `FreezeProfiler`.
 ## Learn More
 
 - [Main README](../README.md) - Usage guide
-- [ARCHITECTURE](../ARCHITECTURE.md) - How it works
-- [INSTALLATION](../INSTALLATION.md) - Setup guide
+- [FINAL_ARCHITECTURE](../docs/FINAL_ARCHITECTURE.md) - How it works
+- [FREEZE_DEBUG](../docs/FREEZE_DEBUG.md) - Debugging guide
 
 ## Troubleshooting
 
@@ -190,5 +193,5 @@ Then measure performance impact using `FreezeProfiler`.
 - Verify `freeze` prop is actually changing
 - Check that component is wrapped in `<Freeze>`
 - Look for console errors
-- Test with native module: `isNativeModuleAvailable()`
+- Verify React Native patch is applied (see docs/FREEZE_DEBUG.md)
 

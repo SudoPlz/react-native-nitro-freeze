@@ -1,7 +1,7 @@
 {
-  "name": "react-native-nitro-freeze",
+  "name": "react-zombie-freeze",
   "version": "1.0.0",
-  "description": "A React Native library that replicates react-freeze without Suspense, Fabric-safe and NitroModule-powered",
+  "description": "Freeze React components without Suspense - visible, non-interactive, zero re-renders",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "types": "lib/typescript/src/index.d.ts",
@@ -10,10 +10,6 @@
   "files": [
     "src",
     "lib",
-    "android",
-    "ios",
-    "cpp",
-    "react-native-nitro-freeze.podspec",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
@@ -30,16 +26,15 @@
     "android",
     "freeze",
     "performance",
-    "nitro",
     "fabric"
   ],
-  "repository": "https://github.com/yourusername/react-native-nitro-freeze",
+  "repository": "https://github.com/yourusername/react-zombie-freeze",
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/react-native-nitro-freeze/issues"
+    "url": "https://github.com/yourusername/react-zombie-freeze/issues"
   },
-  "homepage": "https://github.com/yourusername/react-native-nitro-freeze#readme",
+  "homepage": "https://github.com/yourusername/react-zombie-freeze#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -70,11 +65,6 @@
         }
       ]
     ]
-  },
-  "codegenConfig": {
-    "name": "RNNitroFreezeSpec",
-    "type": "modules",
-    "jsSrcsDir": "src/native"
   }
 }
 

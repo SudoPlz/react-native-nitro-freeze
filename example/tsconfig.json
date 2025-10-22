@@ -2,7 +2,7 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "react-native-nitro-freeze": ["../src/index.ts"]
+      "react-zombie-freeze": ["../src/index.ts"]
     }
   }
 }

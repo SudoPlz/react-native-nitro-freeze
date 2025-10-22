@@ -56,7 +56,7 @@ dependencies {
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:hermes-android")
 
-    implementation project(':react-native-nitro-freeze')
+    implementation project(':react-zombie-freeze')
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

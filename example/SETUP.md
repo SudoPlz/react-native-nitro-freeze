@@ -9,12 +9,11 @@ cd example
 yarn install
 ```
 
-### 2. iOS Setup
+### 2. Apply React Native Patch
 
 ```bash
-cd ios
-pod install
-cd ..
+# Apply the patch to React Native
+# See docs/FINAL_ARCHITECTURE.md for patch details
 ```
 
 ### 3. Run the App
@@ -40,16 +39,15 @@ yarn android
    yarn install
    ```
 
-2. **Install CocoaPods dependencies:**
+2. **Apply React Native patch:**
    ```bash
-   cd ios
-   pod install
-   cd ..
+   # See docs/FINAL_ARCHITECTURE.md for complete patch instructions
+   # The patch is required for freeze functionality to work
    ```
 
 3. **Open in Xcode (optional):**
    ```bash
-   open ios/NitroFreezeExample.xcworkspace
+   open ios/ZombieFreezeExample.xcworkspace
    ```
 
 4. **Run from command line:**
@@ -92,7 +90,7 @@ example/
 ├── ios/                      # iOS native code
 │   ├── Podfile              # CocoaPods configuration
 │   ├── .xcode.env           # Xcode environment
-│   └── NitroFreezeExample/  # iOS app
+│   └── ZombieFreezeExample/ # iOS app
 │       ├── AppDelegate.h/mm # App delegate
 │       ├── Info.plist       # App configuration
 │       ├── LaunchScreen.storyboard
@@ -113,19 +111,10 @@ example/
 
 ### iOS
 
-**Pod install fails:**
-```bash
-cd ios
-rm -rf Pods Podfile.lock
-pod repo update
-pod install
-cd ..
-```
-
 **Build fails:**
 ```bash
 cd ios
-xcodebuild clean -workspace NitroFreezeExample.xcworkspace -scheme NitroFreezeExample
+xcodebuild clean -workspace ZombieFreezeExample.xcworkspace -scheme ZombieFreezeExample
 cd ..
 ```
 

@@ -6,6 +6,6 @@ include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
 
 // Include the library project
-include ':react-native-nitro-freeze'
-project(':react-native-nitro-freeze').projectDir = new File(rootProject.projectDir, '../../android')
+include ':react-zombie-freeze'
+project(':react-zombie-freeze').projectDir = new File(rootProject.projectDir, '../../android')
 

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- View tag ID for storing freeze state -->
-    <item name="freeze_state" type="id" />
-</resources>
-

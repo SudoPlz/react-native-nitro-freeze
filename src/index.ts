@@ -1,18 +1,18 @@
 /**
- * react-native-nitro-freeze
+ * react-zombie-freeze
  * 
- * A drop-in replacement for react-freeze that works without Suspense.
- * Compatible with React Native Fabric and bridgeless mode.
+ * Freeze React components without Suspense.
+ * Keep content visible, block interactions, prevent re-renders.
  * 
  * @example
  * ```tsx
- * import { Freeze } from 'react-native-nitro-freeze';
+ * import { Freeze } from 'react-zombie-freeze';
  * 
  * function App() {
- *   const [isInactive, setIsInactive] = useState(false);
+ *   const [frozen, setFrozen] = useState(false);
  *   
  *   return (
- *     <Freeze freeze={isInactive}>
+ *     <Freeze freeze={frozen}>
  *       <ExpensiveComponent />
  *     </Freeze>
  *   );
@@ -26,9 +26,7 @@ export type { FreezeProps } from './Freeze';
 // FreezeProfiler is exported for performance measurement
 export { default as FreezeProfiler } from './FreezeProfiler';
 
-// Context and hooks are internal but we export useIsFrozen for advanced use cases
+// Context hook for checking if component is frozen
 export { useIsFrozen } from './context';
 
-// Native module utilities (mostly for internal use and testing)
-export { isNativeModuleAvailable } from './native';
 

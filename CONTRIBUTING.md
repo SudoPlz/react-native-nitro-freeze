@@ -1,4 +1,4 @@
-# Contributing to react-native-nitro-freeze
+# Contributing to react-zombie-freeze
 
 Thank you for your interest in contributing! This document provides guidelines for contributing to this project.
 
@@ -6,8 +6,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/react-native-nitro-freeze.git
-cd react-native-nitro-freeze
+git clone https://github.com/yourusername/react-zombie-freeze.git
+cd react-zombie-freeze
 ```
 
 2. Install dependencies:
@@ -33,21 +33,15 @@ yarn android
 ## Project Structure
 
 ```
-react-native-nitro-freeze/
+react-zombie-freeze/
 ├── src/                    # TypeScript source code
 │   ├── Freeze.tsx         # Main Freeze component
 │   ├── FreezeProfiler.tsx # Performance profiling component
 │   ├── context.ts         # FreezeContext implementation
-│   ├── hooks.ts           # Helper hooks
-│   ├── native/            # Native module interface
 │   └── index.ts           # Public API exports
-├── ios/                   # iOS native code
-│   ├── RNNitroFreezeModule.h
-│   └── RNNitroFreezeModule.mm
-├── android/               # Android native code
-│   └── src/main/java/com/margelo/nitrofreeze/
-│       ├── RNNitroFreezeModule.kt
-│       └── RNNitroFreezePackage.kt
+├── docs/                  # Documentation
+│   ├── FINAL_ARCHITECTURE.md
+│   └── FREEZE_DEBUG.md
 ├── example/               # Example React Native app
 └── README.md
 ```
@@ -91,6 +85,8 @@ Before submitting a PR:
 2. Test with Fabric enabled
 3. Test nested freeze scenarios
 4. Verify performance improvements with FreezeProfiler
+5. Ensure React Native patch is applied and working
+6. Test state update blocking (setState should not execute when frozen)
 
 ## Questions?
 

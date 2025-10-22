@@ -1,5 +1,5 @@
 {
-  "name": "react-native-nitro-freeze-example",
+  "name": "react-zombie-freeze-example",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "react": "19.0.0",
     "react-native": "^0.78.0",
     "react-native-gesture-handler": "^2.21.0",
-    "react-native-nitro-freeze": "file:..",
+    "react-zombie-freeze": "file:..",
     "react-native-reanimated": "^3.17.0"
   },
   "devDependencies": {
