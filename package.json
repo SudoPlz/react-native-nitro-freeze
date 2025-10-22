@@ -1,6 +1,6 @@
 {
   "name": "react-zombie-freeze",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Freeze React components without Suspense - visible, non-interactive, zero re-renders",
   "main": "src/index.ts",
   "react-native": "src/index.ts",
