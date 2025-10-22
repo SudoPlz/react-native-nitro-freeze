@@ -139,6 +139,12 @@ function ProfiledFreezeDemo() {
   const [freeze, setFreeze] = useState(false);
   const [metrics, setMetrics] = useState<any>(null);
 
+  // Wrap setMetrics in useCallback to stabilize the reference
+  // This prevents infinite loops when FreezeProfiler re-renders
+  const handleReportedData = React.useCallback((data: any) => {
+    setMetrics(data);
+  }, []);
+
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Performance Profiling Demo</Text>
@@ -159,16 +165,10 @@ function ProfiledFreezeDemo() {
         <View style={styles.metricsContainer}>
           <Text style={styles.metricsTitle}>Performance Metrics:</Text>
           <Text style={styles.metricsText}>
-            Parent Renders: {metrics.parentRenderCount}
+            Total Renders: {metrics.renderCount}
           </Text>
           <Text style={styles.metricsText}>
-            Child Renders: {metrics.childRenderCount}
-          </Text>
-          <Text style={styles.metricsText}>
-            Avg Parent Time: {metrics.averageParentRenderTime.toFixed(2)}ms
-          </Text>
-          <Text style={styles.metricsText}>
-            Avg Child Time: {metrics.averageChildRenderTime.toFixed(2)}ms
+            Last Render Time: {metrics.renderTime.toFixed(2)}ms
           </Text>
           <Text style={[styles.metricsText, metrics.freeze && styles.metricsHighlight]}>
             Freeze Effective: {metrics.freeze ? '✅ YES' : '❌ NO'}
@@ -178,8 +178,8 @@ function ProfiledFreezeDemo() {
 
       <FreezeProfiler
         freeze={freeze}
-        componentName="ProfiledList"
-        onReportedData={setMetrics}
+        testId="ProfiledList"
+        onReportedData={handleReportedData}
       >
         <ExpensiveList title="Profiled Component" color="#F0F0FF" />
       </FreezeProfiler>
@@ -204,9 +204,9 @@ export default function App() {
             No Suspense • Fabric-safe • NitroModule-powered
           </Text>
         </View>
-
-        <ProfiledFreezeDemo />
         <NestedFreezeDemo />
+        <ProfiledFreezeDemo />
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -346,4 +346,3 @@ const styles = StyleSheet.create({
     color: '#059669',
   },
 });
-

@@ -1,7 +1,6 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native/scripts/react_native_pods'
 
-platform :ios, '13.0'
+platform :ios, '16.0'
 prepare_react_native_project!
 
 target 'NitroFreezeExample' do
@@ -11,14 +10,10 @@ target 'NitroFreezeExample' do
     :path => config[:reactNativePath],
     :hermes_enabled => true,
     :fabric_enabled => true,
-    :flipper_configuration => FlipperConfiguration.disabled,
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-
-  pod 'react-native-nitro-freeze', :path => '../..'
 
   post_install do |installer|
     react_native_post_install(installer)
   end
 end
-

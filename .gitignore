@@ -19,6 +19,10 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+*.xcworkspace/
+.xcode.env.local
+PrivacyInfo.xcprivacy
+Podfile.lock
 
 # Android/IntelliJ
 build/
@@ -32,6 +36,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
+yarn.lock
 
 # Build output
 lib/
@@ -45,6 +50,9 @@ coverage/
 # Misc
 .env
 .envrc
+
+# Example app artifacts
+example/example/
 
 # not essential for library
 IMPLEMENTATION_SUMMARY.md

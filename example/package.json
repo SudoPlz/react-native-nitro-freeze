@@ -10,21 +10,22 @@
     "typescript": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^19.0.0",
+    "react": "19.0.0",
     "react-native": "^0.78.0",
     "react-native-gesture-handler": "^2.21.0",
-    "react-native-reanimated": "^3.17.0",
-    "react-native-nitro-freeze": "file:.."
+    "react-native-nitro-freeze": "file:..",
+    "react-native-reanimated": "^3.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.0",
     "@babel/preset-env": "^7.25.0",
     "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "^13.6.0",
     "@react-native/babel-preset": "^0.78.0",
     "@react-native/eslint-config": "^0.78.0",
     "@react-native/metro-config": "^0.78.0",
     "@react-native/typescript-config": "^0.78.0",
-    "@types/react": "^19.0.0",
+    "@types/react": "19.0.0",
     "eslint": "^8.57.0",
     "typescript": "^5.6.0"
   },
@@ -32,4 +33,3 @@
     "node": ">=18"
   }
 }
-

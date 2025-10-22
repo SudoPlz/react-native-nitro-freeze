@@ -1,33 +1,31 @@
 #import "RNNitroFreezeModule.h"
 #import <React/RCTUIManager.h>
-#import <React/RCTBridge.h>
-#import <React/RCTUIManagerUtils.h>
 #import <UIKit/UIKit.h>
 
-@implementation RNNitroFreezeModule {
-  __weak RCTBridge *_bridge;
-}
+@implementation RNNitroFreezeModule
 
 RCT_EXPORT_MODULE(RNNitroFreeze)
 
-@synthesize bridge = _bridge;
-
-- (void)setBridge:(RCTBridge *)bridge {
-  _bridge = bridge;
-}
-
 /**
  * Synchronously set the frozen state of a view.
- * Uses JSI for zero-copy performance.
+ * Works with bridgeless React Native (RN 0.78+)
  */
-- (void)setViewFrozen:(NSNumber *)viewTag frozen:(BOOL)frozen {
-  if (!_bridge || !_bridge.uiManager) {
+RCT_EXPORT_METHOD(setViewFrozen:(nonnull NSNumber *)viewTag frozen:(BOOL)frozen) {
+  if (!viewTag) {
     return;
   }
   
-  // Execute on UI thread for immediate effect
-  RCTExecuteOnUIManagerQueue(^{
-    UIView *view = [self.bridge.uiManager viewForReactTag:viewTag];
+  // Execute on main thread to access UIKit
+  dispatch_async(dispatch_get_main_queue(), ^{
+    UIView *view = nil;
+    
+    // Get the key window from the first available window
+    UIWindow *keyWindow = [UIApplication sharedApplication].windows.firstObject;
+    
+    if (keyWindow) {
+      view = [self findViewWithTag:[viewTag integerValue] inView:keyWindow];
+    }
+    
     if (!view) {
       return;
     }
@@ -59,19 +57,20 @@ RCT_EXPORT_MODULE(RNNitroFreeze)
   });
 }
 
-// Export to JSI for NitroModule access
-- (void)installJSIBindings {
-  if (!_bridge || !_bridge.runtime) {
-    return;
+// Helper method to find a view by React tag
+- (UIView *)findViewWithTag:(NSInteger)tag inView:(UIView *)view {
+  if (view.reactTag && [view.reactTag integerValue] == tag) {
+    return view;
   }
   
-  // In a full NitroModule implementation, this would use JSI to expose
-  // the module to JavaScript as global.RNNitroFreezeModule
-  // For now, we use the standard RCT_EXPORT_METHOD approach
-}
-
-RCT_EXPORT_METHOD(setViewFrozen:(nonnull NSNumber *)viewTag frozen:(BOOL)frozen) {
-  [self setViewFrozen:viewTag frozen:frozen];
+  for (UIView *subview in view.subviews) {
+    UIView *found = [self findViewWithTag:tag inView:subview];
+    if (found) {
+      return found;
+    }
+  }
+  
+  return nil;
 }
 
 + (BOOL)requiresMainQueueSetup {
