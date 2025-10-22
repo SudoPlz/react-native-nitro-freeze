@@ -132,26 +132,6 @@ import { Freeze } from 'react-zombie-freeze';
 
 ---
 
-### Hooks
-
-#### `useIsFrozen()`
-
-```typescript
-import { useIsFrozen } from 'react-zombie-freeze';
-
-function MyComponent() {
-  const isFrozen = useIsFrozen();
-  
-  // Conditionally run expensive operations
-  if (!isFrozen) {
-    doExpensiveWork();
-  }
-}
-```
-
-
----
-
 ### Performance Profiling
 
 ```typescript
@@ -428,7 +408,7 @@ npx patch-package react-native
 
 1. Check patch is applied: Look for `isFiberFrozen` in `ReactFabric-dev.js`
 2. Verify freeze prop: Add `console.log(freeze)` 
-3. Check nested context: Use `useIsFrozen()` hook
+3. Check nested context: Verify freeze prop is propagating correctly
 
 ### Interactions Not Blocked?
 

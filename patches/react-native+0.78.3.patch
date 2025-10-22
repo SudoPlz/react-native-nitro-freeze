@@ -1,0 +1,249 @@
+diff --git a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-dev.js b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-dev.js
+index 153ddfa..7d75ea6 100644
+--- a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-dev.js
++++ b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-dev.js
+@@ -5772,12 +5772,18 @@ __DEV__ &&
+         provider = provider.return;
+       }
+     }
+-    function dispatchReducerAction(
++    
++// ZOMBIE-FREEZE PATCH: Import shared utilities
++var ZombieFreezeUtils = require('./ZombieFreezeUtils');
++var isFiberFrozen = ZombieFreezeUtils.isFiberFrozen;
++// END ZOMBIE-FREEZE PATCH
++function dispatchReducerAction(
+       fiber,
+       queue,
+       action,
+       JSCompiler_OptimizeArgumentsArray_p0
+     ) {
++      if (isFiberFrozen(fiber)) return;
+       "function" === typeof JSCompiler_OptimizeArgumentsArray_p0 &&
+         error$jscomp$0(
+           "State updates from the useState() and useReducer() Hooks don't support the second callback argument. To execute a side effect after rendering, declare it in the component body with useEffect()."
+@@ -5818,6 +5824,7 @@ __DEV__ &&
+       action,
+       JSCompiler_OptimizeArgumentsArray_p1
+     ) {
++      if (isFiberFrozen(fiber)) return;
+       "function" === typeof JSCompiler_OptimizeArgumentsArray_p1 &&
+         error$jscomp$0(
+           "State updates from the useState() and useReducer() Hooks don't support the second callback argument. To execute a side effect after rendering, declare it in the component body with useEffect()."
+@@ -9572,7 +9579,7 @@ __DEV__ &&
+               (lastEffect = void 0),
+               (flags & Insertion) !== NoFlags &&
+                 (isRunningInsertionEffect = !0),
+-              (lastEffect = runWithFiberInDEV(
++              (lastEffect = isFiberFrozen(finishedWork) ? null : runWithFiberInDEV(
+                 finishedWork,
+                 callCreateInDEV,
+                 updateQueue
+@@ -9662,7 +9669,7 @@ __DEV__ &&
+                     ),
+                 (flags & Insertion) !== NoFlags &&
+                   (isRunningInsertionEffect = !0),
+-                runWithFiberInDEV(
++                isFiberFrozen(finishedWork) || runWithFiberInDEV(
+                   finishedWork,
+                   callDestroyInDEV,
+                   finishedWork,
+@@ -16001,6 +16008,7 @@ __DEV__ &&
+         },
+         enqueueSetState: function (inst, payload, callback) {
+           inst = inst._reactInternals;
++          if (isFiberFrozen(inst)) return;
+           var lane = requestUpdateLane(inst),
+             update = createUpdate(lane);
+           update.payload = payload;
+@@ -16015,6 +16023,7 @@ __DEV__ &&
+         },
+         enqueueReplaceState: function (inst, payload, callback) {
+           inst = inst._reactInternals;
++          if (isFiberFrozen(inst)) return;
+           var lane = requestUpdateLane(inst),
+             update = createUpdate(lane);
+           update.tag = ReplaceState;
+@@ -16030,6 +16039,7 @@ __DEV__ &&
+         },
+         enqueueForceUpdate: function (inst, callback) {
+           inst = inst._reactInternals;
++          if (isFiberFrozen(inst)) return;
+           var lane = requestUpdateLane(inst),
+             update = createUpdate(lane);
+           update.tag = ForceUpdate;
+diff --git a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-prod.js b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-prod.js
+index 2c9abc9..ed69612 100644
+--- a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-prod.js
++++ b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-prod.js
+@@ -4369,7 +4369,14 @@ function refreshCache(fiber) {
+     provider = provider.return;
+   }
+ }
++
++// ZOMBIE-FREEZE PATCH: Import shared utilities
++var ZombieFreezeUtils = require('./ZombieFreezeUtils');
++var isFiberFrozen = ZombieFreezeUtils.isFiberFrozen;
++// END ZOMBIE-FREEZE PATCH
++
+ function dispatchReducerAction(fiber, queue, action) {
++  if (isFiberFrozen(fiber)) return;
+   var lane = requestUpdateLane(fiber);
+   action = {
+     lane: lane,
+@@ -4387,6 +4394,7 @@ function dispatchReducerAction(fiber, queue, action) {
+         entangleTransitionUpdate(action, queue, lane)));
+ }
+ function dispatchSetState(fiber, queue, action) {
++  if (isFiberFrozen(fiber)) return;
+   var lane = requestUpdateLane(fiber);
+   dispatchSetStateInternal(fiber, queue, action, lane);
+ }
+@@ -4790,6 +4798,7 @@ var classComponentUpdater = {
+   },
+   enqueueSetState: function (inst, payload, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.payload = payload;
+@@ -4801,6 +4810,7 @@ var classComponentUpdater = {
+   },
+   enqueueReplaceState: function (inst, payload, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.tag = 1;
+@@ -4813,6 +4823,7 @@ var classComponentUpdater = {
+   },
+   enqueueForceUpdate: function (inst, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.tag = 2;
+@@ -7482,7 +7493,7 @@ function commitHookEffectListMount(flags, finishedWork) {
+           lastEffect = void 0;
+           var create$114 = updateQueue.create,
+             inst = updateQueue.inst;
+-          lastEffect = create$114();
++          lastEffect = isFiberFrozen(finishedWork) ? void 0 : create$114();
+           inst.destroy = lastEffect;
+         }
+         updateQueue = updateQueue.next;
+@@ -7512,7 +7523,7 @@ function commitHookEffectListUnmount(
+             lastEffect = finishedWork;
+             var nearestMountedAncestor = nearestMountedAncestor$jscomp$0;
+             try {
+-              destroy();
++              isFiberFrozen(finishedWork) || destroy();
+             } catch (error) {
+               captureCommitPhaseError(
+                 lastEffect,
+diff --git a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-profiling.js b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-profiling.js
+index c4b05f2..f13f0f0 100644
+--- a/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-profiling.js
++++ b/node_modules/react-native/Libraries/Renderer/implementations/ReactFabric-profiling.js
+@@ -4525,7 +4525,14 @@ function refreshCache(fiber) {
+     provider = provider.return;
+   }
+ }
++
++// ZOMBIE-FREEZE PATCH: Import shared utilities
++var ZombieFreezeUtils = require('./ZombieFreezeUtils');
++var isFiberFrozen = ZombieFreezeUtils.isFiberFrozen;
++// END ZOMBIE-FREEZE PATCH
++
+ function dispatchReducerAction(fiber, queue, action) {
++  if (isFiberFrozen(fiber)) return;
+   var lane = requestUpdateLane(fiber);
+   action = {
+     lane: lane,
+@@ -4544,6 +4551,7 @@ function dispatchReducerAction(fiber, queue, action) {
+   markStateUpdateScheduled(fiber, lane);
+ }
+ function dispatchSetState(fiber, queue, action) {
++  if (isFiberFrozen(fiber)) return;
+   var lane = requestUpdateLane(fiber);
+   dispatchSetStateInternal(fiber, queue, action, lane);
+   markStateUpdateScheduled(fiber, lane);
+@@ -4949,6 +4957,7 @@ var classComponentUpdater = {
+   },
+   enqueueSetState: function (inst, payload, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.payload = payload;
+@@ -4961,6 +4970,7 @@ var classComponentUpdater = {
+   },
+   enqueueReplaceState: function (inst, payload, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.tag = 1;
+@@ -4974,6 +4984,7 @@ var classComponentUpdater = {
+   },
+   enqueueForceUpdate: function (inst, callback) {
+     inst = inst._reactInternals;
++    if (isFiberFrozen(inst)) return;
+     var lane = requestUpdateLane(inst),
+       update = createUpdate(lane);
+     update.tag = 2;
+@@ -7785,7 +7796,7 @@ function commitHookEffectListMount(flags, finishedWork) {
+           lastEffect = void 0;
+           var create$122 = updateQueue.create,
+             inst = updateQueue.inst;
+-          lastEffect = create$122();
++          lastEffect = isFiberFrozen(finishedWork) ? void 0 : create$122();
+           inst.destroy = lastEffect;
+           0 !== (flags & 8)
+             ? null !== injectedProfilingHooks &&
+@@ -7839,7 +7850,7 @@ function commitHookEffectListUnmount(
+             lastEffect = finishedWork;
+             var nearestMountedAncestor = nearestMountedAncestor$jscomp$0;
+             try {
+-              destroy();
++              isFiberFrozen(finishedWork) || destroy();
+             } catch (error) {
+               captureCommitPhaseError(
+                 lastEffect,
+diff --git a/node_modules/react-native/Libraries/Renderer/implementations/ZombieFreezeUtils.js b/node_modules/react-native/Libraries/Renderer/implementations/ZombieFreezeUtils.js
+new file mode 100644
+index 0000000..5113bf0
+--- /dev/null
++++ b/node_modules/react-native/Libraries/Renderer/implementations/ZombieFreezeUtils.js
+@@ -0,0 +1,31 @@
++/**
++ * ZOMBIE-FREEZE PATCH: Shared utilities for react-zombie-freeze
++ * This module contains the isFiberFrozen function used across all React Native renderers
++ */
++
++/**
++ * Check if a fiber is in a frozen subtree
++ * @param {Fiber} fiber - The fiber to check
++ * @returns {boolean} - True if the fiber is frozen
++ */
++function isFiberFrozen(fiber) {
++  var node = fiber, frozenFiber = null;
++  while (node.return) {
++    if (frozenFiber && node === frozenFiber) return !0;
++    node = node.return;
++  }
++  if (node.tag === 3) {
++    var root = node.stateNode;
++    if (root && root.__frozenFiber && root.__isFrozen && root.__isFrozen()) {
++      frozenFiber = root.__frozenFiber;
++      node = fiber;
++      while (node && node !== frozenFiber) node = node.return;
++      if (node === frozenFiber) return !0;
++    }
++  }
++  return !1;
++}
++
++module.exports = {
++  isFiberFrozen: isFiberFrozen
++};
