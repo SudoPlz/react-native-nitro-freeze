@@ -1,11 +1,6 @@
-rootProject.name = 'NitroFreezeExample'
-
-apply from: file("../node_modules/@react-native/gradle-plugin/settings.gradle")
-
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+rootProject.name = 'ZombieFreezeExample'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
-
-// Include the library project
-include ':react-zombie-freeze'
-project(':react-zombie-freeze').projectDir = new File(rootProject.projectDir, '../../android')
-
