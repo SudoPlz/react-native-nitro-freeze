@@ -5596,7 +5596,7 @@ react-test-renderer@19.0.0:
     react-is "^19.0.0"
     scheduler "^0.25.0"
 
-react-zombie-freeze@react-zombie-freeze:
+react-zombie-freeze@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/react-zombie-freeze/-/react-zombie-freeze-0.0.1.tgz#c4a12baf77f90ce95f25562d23d8edcf63a8ccce"
   integrity sha512-6F4UzM/UxMufsx4EvvIZdviFAQ5n/pMFynnvBytqgWaJ0Y3PUGkt64lu/Roe7glLE5Ypm2+dLB5XHCQ+y9CJbg==

@@ -128,7 +128,7 @@ index 2c9abc9..ed69612 100644
            var create$114 = updateQueue.create,
              inst = updateQueue.inst;
 -          lastEffect = create$114();
-+          lastEffect = isFiberFrozen(finishedWork) ? void 0 : create$114();
++          lastEffect = isFiberFrozen(finishedWork) ? function() {} : create$114();
            inst.destroy = lastEffect;
          }
          updateQueue = updateQueue.next;
@@ -197,7 +197,7 @@ index c4b05f2..f13f0f0 100644
            var create$122 = updateQueue.create,
              inst = updateQueue.inst;
 -          lastEffect = create$122();
-+          lastEffect = isFiberFrozen(finishedWork) ? void 0 : create$122();
++          lastEffect = isFiberFrozen(finishedWork) ? function() {} : create$122();
            inst.destroy = lastEffect;
            0 !== (flags & 8)
              ? null !== injectedProfilingHooks &&

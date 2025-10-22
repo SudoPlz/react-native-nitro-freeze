@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,9 +7,9 @@ import {
   Text,
   View,
 } from 'react-native';
-import { NestedFreezeDemo } from './components/NestedFreezeDemo';
-import { ProfiledFreezeDemo } from './components/ProfiledFreezeDemo';
-import { VisibleFreezeDemo } from './components/VisibleFreezeDemo';
+import { NestedFreezeDemo, PatchStatus, ProfiledFreezeDemo, VisibleFreezeDemo } from './components';
+
+
 
 /**
  * Main App
@@ -28,6 +28,9 @@ export default function App() {
             No Suspense • Fabric-safe • Zero native code
           </Text>
         </View>
+        
+        <PatchStatus />
+        
         {/* <NestedFreezeDemo />
         <ProfiledFreezeDemo /> */}
         <VisibleFreezeDemo />
