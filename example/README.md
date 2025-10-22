@@ -25,6 +25,9 @@ This example app demonstrates all the features of `react-zombie-freeze`.
 # Install dependencies
 yarn install
 
+# Apply React Native patch (required for freeze functionality)
+npx react-zombie-freeze setup
+
 # iOS: Install pods
 cd ios && pod install && cd ..
 ```

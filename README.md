@@ -42,7 +42,7 @@ Like zombies, frozen components are:
 ### Automatic Setup (Recommended)
 
 ```bash
-npm install react-zombie-freeze
+yarn add react-zombie-freeze
 npx react-zombie-freeze setup
 ```
 
@@ -60,7 +60,7 @@ If automatic patching fails, you can apply it manually:
 cp node_modules/react-zombie-freeze/patches/react-native+0.78.3.patch patches/
 
 # Apply the patch
-npx patch-package
+yarn patch-package
 ```
 
 **Option 2: Manual file editing**
