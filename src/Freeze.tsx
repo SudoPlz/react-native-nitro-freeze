@@ -59,6 +59,8 @@ class FreezeGuard extends Component<{ frozen: boolean; children: React.ReactNode
         // The React Native patch checks these properties to block state updates
         (fiberRoot as any).__frozenFiber = fiber;
         (fiberRoot as any).__isFrozen = () => this.props.frozen;
+        // Store the component instance for validation
+        (fiberRoot as any).__frozenInstance = this;
       }
     } catch (e) {
       if (__DEV__) {
@@ -78,9 +80,11 @@ class FreezeGuard extends Component<{ frozen: boolean; children: React.ReactNode
       }
       
       const fiberRoot = node.stateNode;
-      if (fiberRoot) {
+      if (fiberRoot && (fiberRoot as any).__frozenInstance === this) {
+        // Only unregister if we're the registered instance
         delete (fiberRoot as any).__frozenFiber;
         delete (fiberRoot as any).__isFrozen;
+        delete (fiberRoot as any).__frozenInstance;
       }
     } catch (e) {
       if (__DEV__) {
